@@ -4,8 +4,12 @@
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Photo Library Access Warning</string>
+	<key>NSCameraUsageDescription</key>
+	<string>Photo Library Access Warning</string>
 	<key>CFBundleDisplayName</key>
-	<string>Infinity Tow Appliation</string>
+	<string>Infinity Tow App</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

@@ -18,6 +18,6 @@ class AppPages {
         name: ROUTE_REGISTER,
         page: () => const Signup_Page(),
         binding: RegisterBinding()),
-    GetPage(name: ROUTE_HOME, page: () => const Home_Page()),
+    GetPage(name: ROUTE_HOME, page: () => Home_Page()),
   ];
 }
