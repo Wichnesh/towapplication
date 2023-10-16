@@ -1,12 +1,15 @@
 //import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'dart:io';
 import '../../../../Controller/BottomAppBar_Controller/Branch_SettingController/RecordExpenseController.dart';
 
 class RecordExpenseScreen extends StatelessWidget {
   final ExpenseController controller = Get.put(ExpenseController());
+
+  RecordExpenseScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -81,7 +84,7 @@ class RecordExpenseScreen extends StatelessWidget {
                       if (controller.selectedImages.length < 5) {
                         await controller.pickImage();
                       } else {
-                        // Show a toast or snackbar indicating that only 5 images are allowed
+                        Fluttertoast.showToast(msg: 'Image Limit reached');
                       }
                     },
                     child: const Text('Attach Image'),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infinity_tow_appliation/Utils/constant.dart';
 import 'package:infinity_tow_appliation/views/Dashboard/BottomAppBar_Screens/Branch_Settings/RecordExpenseScreen.dart';
 import '../../../Controller/BottomAppBar_Controller/SettingController.dart';
 
@@ -23,10 +24,14 @@ class SettingScreen extends StatelessWidget {
                   onTap: (){
                     if(data == 'Trucks'){
                       debugPrint('Truck selected');
+                      Get.toNamed(ROUTE_MANAGETRUCKS);
                     }
                     if(data == 'Record Expense'){
                       debugPrint('Record Expense selected');
                       Get.to(()=>RecordExpenseScreen());
+                    }
+                    if(data == 'Equipment Inspection'){
+                      Get.toNamed(ROUTE_EQUIPUMENTINSPECTIONSCREEN);
                     }
                   },
                   child: Card(

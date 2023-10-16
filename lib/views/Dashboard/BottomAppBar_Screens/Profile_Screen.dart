@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../Controller/BottomAppBar_Controller/ProfileController.dart';
+import '../../../Utils/constant.dart';
 
 // class ProfileScreen extends StatelessWidget {
 //   ProfileController profileController = Get.put(ProfileController());
@@ -75,21 +76,28 @@ class ProfileScreen extends StatelessWidget {
                     child: ListView.builder(
                       itemCount: profileController.profileList.length,
                       itemBuilder: (context, index) {
-                        return Card(
-                          elevation: 5,
-                          child: ListTile(
-                            title: Row(
-                              children: [
-                                const Icon(Icons.person_add),
-                                const SizedBox(width: 10,),
-                                Text(profileController.profileList[index]),
-                              ],
+                        return InkWell(
+                          onTap: (){
+                            if(index==0){
+                              Get.toNamed(ROUTE_MANAGEUSERLIST);
+                            }
+                          },
+                          child: Card(
+                            elevation: 5,
+                            child: ListTile(
+                              title: Row(
+                                children: [
+                                  const Icon(Icons.person_add),
+                                  const SizedBox(width: 10,),
+                                  Text(profileController.profileList[index]),
+                                ],
+                              ),
+                              trailing: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.navigate_next_outlined),
+                              ),
+                              // You can add more properties or functionalities to the list tile if needed
                             ),
-                            trailing: IconButton(
-                              onPressed: () {},
-                              icon: const Icon(Icons.navigate_next_outlined),
-                            ),
-                            // You can add more properties or functionalities to the list tile if needed
                           ),
                         );
                       },
