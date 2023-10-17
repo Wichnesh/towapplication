@@ -7,5 +7,6 @@ const ROUTE_MANAGEUSERLIST = "${slash}manageUserList";
 const ROUTE_ADDUSERSCREEN = "${slash}addUserScreen";
 const ROUTE_EQUIPUMENTINSPECTIONSCREEN = "${slash}equipmentInspectionScreen";
 const ROUTE_MANAGETRUCKS = "${slash}trucks";
+const ROUTE_RECORDEXPENSE = "${slash}recordExpense";
 ////
 const SHARED_ADMIN = 'Admin';
