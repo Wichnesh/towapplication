@@ -1,6 +1,4 @@
-import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -22,9 +20,9 @@ class SignUpController extends GetxController {
     isLoading.value = true;
     update();
     Map<String, dynamic> requestData = {
-      "name": "${usernameText.text.trim()}",
-      "email": "${emailText.text.trim()}",
-      "password": "${passwordText.text.trim()}"
+      "name": usernameText.text.trim(),
+      "email": emailText.text.trim(),
+      "password": passwordText.text.trim()
     };
     if (kDebugMode) {
       print(requestData);

@@ -5,13 +5,13 @@ import 'package:infinity_tow_appliation/routes/app_pages.dart';
 import 'package:infinity_tow_appliation/views/Splash_Screen.dart';
 
 void main() async {
-  runApp(MyApp());
+  runApp(const MyApp());
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 }
 
 class MyApp extends StatelessWidget {
-  MyApp({super.key});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override

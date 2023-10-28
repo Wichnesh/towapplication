@@ -19,15 +19,15 @@ class _SplashScreenState extends State<SplashScreen>
   AnimationController? _logoAnimationController;
   SharedPreferences? _prefs;
   bool _isLoggedIn = false;
-  bool _initialized = false;
-  bool _error = false;
+  final bool _initialized = false;
+  final bool _error = false;
   String? errorMsg;
   @override
   void initState() {
     super.initState();
 
     _logoAnimationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+        AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
     _logoAnimation = Tween(begin: 0.0, end: 200.0).animate(CurvedAnimation(
         curve: Curves.bounceOut, parent: _logoAnimationController!));
 
