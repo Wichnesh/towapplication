@@ -12,6 +12,7 @@ class AddUserController extends GetxController {
   void updateStatusBool(bool value){
     status.value = value;
   }
+
   void saveUserData() {
     // Add logic to save user data to a database or perform other actions
     if (kDebugMode) {

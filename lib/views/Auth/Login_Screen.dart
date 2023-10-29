@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:infinity_tow_appliation/Controller/Login_Controller.dart';
 import 'package:get/get.dart';
 import 'package:infinity_tow_appliation/Utils/constant.dart';
 import '../../Utils/imageUtils.dart';
-import 'Signup_Screen.dart';
 
 class Login_Page extends StatefulWidget {
   const Login_Page({super.key});

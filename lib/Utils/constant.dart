@@ -8,5 +8,6 @@ const ROUTE_ADDUSERSCREEN = "${slash}addUserScreen";
 const ROUTE_EQUIPUMENTINSPECTIONSCREEN = "${slash}equipmentInspectionScreen";
 const ROUTE_MANAGETRUCKS = "${slash}trucks";
 const ROUTE_RECORDEXPENSE = "${slash}recordExpense";
+const ROUTE_MANAGEINSPECTIONFORM = "${slash}inspectionForm";
 ////
 const SHARED_ADMIN = 'Admin';

@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
 
-const logocolor = Colors.white;
-const primarycolor = Colors.blue;
+const logoColor = Colors.white;
+final primaryColor = Colors.blue.shade400;

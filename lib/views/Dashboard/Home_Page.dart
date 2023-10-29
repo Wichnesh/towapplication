@@ -96,7 +96,7 @@ class Home_Page extends StatelessWidget {
   Widget _getPage(int index) {
     switch (index) {
       case 0:
-        return HomeScreen();
+        return const HomeScreen();
       case 1:
         return ProfileScreen();
       case 2:
@@ -104,7 +104,7 @@ class Home_Page extends StatelessWidget {
       case 3:
         return SettingScreen();
       default:
-        return HomeScreen();
+        return const HomeScreen();
     }
   }
 }

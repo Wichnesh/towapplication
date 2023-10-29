@@ -7,6 +7,8 @@ import '../../../Controller/BottomAppBar_Controller/SettingController.dart';
 class SettingScreen extends StatelessWidget {
   final SettingController settingController = Get.put(SettingController());
 
+  SettingScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -28,10 +30,10 @@ class SettingScreen extends StatelessWidget {
                     }
                     if(data == 'Record Expense'){
                       debugPrint('Record Expense selected');
-                      Get.to(()=>RecordExpenseScreen());
+                      Get.toNamed(ROUTE_RECORDEXPENSE);
                     }
                     if(data == 'Equipment Inspection'){
-                      Get.toNamed(ROUTE_EQUIPUMENTINSPECTIONSCREEN);
+                      Get.toNamed(ROUTE_MANAGEINSPECTIONFORM);
                     }
                   },
                   child: Card(

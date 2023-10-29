@@ -6,6 +6,8 @@ import '../../../Controller/BottomAppBar_Controller/DailController.dart';
 
 class DialScreen extends StatelessWidget {
   DialController controller = Get.put(DialController());
+
+  DialScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return SafeArea(

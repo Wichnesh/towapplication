@@ -7,6 +7,8 @@ import '../../../../Controller/BottomAppBar_Controller/Branch_ProfileController/
 class AddUserScreen extends StatelessWidget {
   final AddUserController controller = Get.put(AddUserController());
 
+  AddUserScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -6,9 +6,8 @@ import 'package:get/get.dart';
 import 'dart:io';
 import '../../../../Controller/BottomAppBar_Controller/Branch_SettingController/RecordExpenseController.dart';
 
-class RecordExpenseScreen extends StatelessWidget {
-  RecordExpenseScreen({super.key});
- final ExpenseController controller = Get.put(ExpenseController());
+class RecordExpenseScreen extends GetView<ExpenseController> {
+  const RecordExpenseScreen({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,10 +96,10 @@ class RecordExpenseScreen extends StatelessWidget {
                 const SizedBox(height: 20.0),
                 ListView.builder(
                   shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.selectedImages.length,
                   itemBuilder: (context, index) {
-                    return Container(
+                    return SizedBox(
                       height: 150,
                       child: GestureDetector(
                         onTap: () {
