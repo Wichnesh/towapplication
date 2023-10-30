@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../model/Equipment_model.dart';
 
@@ -25,6 +27,33 @@ class EquipmentScreenController extends GetxController {
     selectedStatus.value = status;
   }
 
+  void printList(){
+    for(var data in inspectionList){
+      print(data.truck);
+      for(var item in data.data){
+        print(item.title);
+        for(var list in item.inspectionItems){
+          print(list.name);
+        }
+      }
+    }
+  }
+
+  // Function to capture image from camera
+  Future<void> captureImage(int mainIndex, int index) async {
+    final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      // Convert the image file to Uint8List
+      Uint8List imageBytes = await pickedFile.readAsBytes();
+
+      // Update the InspectionItem's images list
+      var item = inspectionList[0].data[mainIndex].inspectionItems[index];
+      item.images!.add(imageBytes);
+      // Update the UI using GetX update() function
+      update();
+    }
+  }
 
   // Update the status of InspectionItem at the given index
   void updateInspectionStatus(int mainIndex,int index, String status) {
@@ -150,6 +179,7 @@ class EquipmentScreenController extends GetxController {
           var inspectionList = InspectionItem(
             name: value,
             notes: "",
+            images: [],
             pass: true,
             fail: false,
             nA: false,

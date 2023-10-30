@@ -32,6 +32,7 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
                 }).toList(),
                 onChanged: (value) {
                   controller.selectedTruck.value = value!;
+                  controller.inspectionList[0].truck = controller.selectedTruck.value;
                 },
               ),
               const SizedBox(height: 20),
@@ -39,6 +40,9 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
                 controller: controller.odometerText,
                 hintText: 'Odometer',
                 type: TextInputType.number,
+                onChange: (value){
+                  controller.inspectionList[0].odometer = controller.odometerText.text;
+                },
                 suffixWidget: InkWell(
                   onTap: () {
                     if (kDebugMode) {
@@ -76,13 +80,36 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 10,),
-                                  Row(
+                                  Obx(() => Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(data[mainIndex].inspectionItems[index].name!,style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 16),),
-                                      const Icon(Icons.camera_alt_outlined),
+                                      Row(
+                                        children: [
+                                          data[mainIndex].inspectionItems[index].images!.isNotEmpty ?
+                                          Container(
+                                            width: 15, // Set the width of the container as per your requirement
+                                            height: 15, // Set the height of the container as per your requirement
+                                            color: Colors.blue, // Replace 'Colors.blue' with your desired primary color
+                                            child: Center(
+                                              child: Text(
+                                                data[mainIndex].inspectionItems[index].images!.length.toString(),
+                                                style: const TextStyle(color: Colors.white), // Set text color to white or any other contrasting color
+                                              ),
+                                            ),
+                                          ) :
+                                          Container(),
+                                          const SizedBox(width: 10),
+                                          InkWell(
+                                              onTap:(){
+                                                controller.captureImage(mainIndex, index);
+                                              },
+                                              child: const Icon(Icons.camera_alt_outlined)
+                                          ),
+                                        ],
+                                      )
                                     ],
-                                  ),
+                                  ),),
                                   const SizedBox(height: 15,),
                                   Obx(() => Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -128,13 +155,18 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
                 controller: controller.notesText,
                 hintText: 'Notes',
                 type: TextInputType.text,
+                onChange: (value){
+                  controller.inspectionList[0].notes = controller.notesText.text;
+                },
               ),
               const SizedBox(height: 20),
               SizedBox(
                 width: screenWidth,
                 child: ElevatedButton(
-                    onPressed: (){},
-                    child: const Text("Save")
+                    onPressed: (){
+                      controller.printList();
+                    },
+                    child: const Text("Next")
                 ),
               )
             ],

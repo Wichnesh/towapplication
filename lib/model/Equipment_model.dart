@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:get/get.dart';
 
 class InspectionModel {
@@ -66,6 +68,7 @@ class InspectionItem {
   String? name;
   String? notes;
   RxBool? pass;
+  RxList<Uint8List>? images; // Use RxList<Uint8List> for observable list
   RxBool? fail;
   RxBool? nA;
 
@@ -75,11 +78,13 @@ class InspectionItem {
     required bool pass,
     required bool fail,
     required bool nA,
+    List<Uint8List>? images,
   }) {
     // Initialize RxBools with the initial values
-    this.pass = pass ? pass.obs : false.obs;
-    this.fail = fail ? fail.obs : false.obs;
-    this.nA = nA ? nA.obs : false.obs;// Initialize data in the constructor body
+    this.pass = pass.obs;
+    this.fail = fail.obs;
+    this.nA = nA.obs;
+    // Initialize RxList<Uint8List> with the initial value (or an empty list if null)
+    this.images = RxList(images ?? []);
   }
 }
-
