@@ -9,5 +9,7 @@ const ROUTE_EQUIPUMENTINSPECTIONSCREEN = "${slash}equipmentInspectionScreen";
 const ROUTE_MANAGETRUCKS = "${slash}trucks";
 const ROUTE_RECORDEXPENSE = "${slash}recordExpense";
 const ROUTE_MANAGEINSPECTIONFORM = "${slash}inspectionForm";
+const ROUTE_ADDTRUCKFORM = "${slash}addTruck";
 ////
 const SHARED_ADMIN = 'Admin';
+const TOKEN = "Token";

@@ -1,4 +1,4 @@
-const urlBase = "https://authwithblog.000webhostapp.com/api/";
+const urlBase = "https://sample.mycompany.host/api/";
 
-const urllogin = "${urlBase}login";
-const urlregister = "${urlBase}register";
+const urlLogin = "${urlBase}login";
+const urlRegister = "${urlBase}register";

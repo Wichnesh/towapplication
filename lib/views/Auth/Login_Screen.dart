@@ -152,8 +152,7 @@ class _Login_PageState extends State<Login_Page> {
                         backgroundColor: Colors.blue,
                       ),
                       onPressed: () {
-                        //controller.loginApiDio();
-                        Get.toNamed(ROUTE_HOME);
+                        controller.validation();
                       },
                       child: const Text("Login",
                           style: TextStyle(color: Colors.white70)),

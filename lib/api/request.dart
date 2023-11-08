@@ -1,6 +1,11 @@
 import 'dart:async';
-
+import 'dart:convert';
+import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
+import '../Utils/constant.dart';
+import '../utils/pref_manager.dart';
+import 'package:http/http.dart' as http;
 
 class RequestDio {
   final String? url;
@@ -9,48 +14,66 @@ class RequestDio {
 
   RequestDio({this.url, this.body}) {
     dio.options.headers['Accept'] = 'application/json';
+    dio.options.headers['Authorization'] = 'Bearer ${Prefs.getString(TOKEN)}';
   }
 
   Future<Response<dynamic>> post() async {
+    if (kDebugMode) {
+      print('REQUEST DATA :-   URL IS = $url || body = $body  || Bearer ${Prefs.getString(TOKEN)} ');
+    }
     try {
       final response = await dio.post(url!, data: body);
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectionTimeout ||
-          e.type == DioErrorType.receiveTimeout) {
+    } catch (e) {
+      if (e is SocketException) {
         throw TimeoutException('Connection timeout. Please try again.');
       } else {
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
         throw Exception('Error occurred while making a request.');
       }
     }
   }
+}
 
-  Future<Response<dynamic>> get() async {
-    try {
-      final response = await dio.get(url!, data: body);
-      return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectionTimeout ||
-          e.type == DioErrorType.receiveTimeout) {
-        throw TimeoutException('Connection timeout. Please try again.');
-      } else {
-        print(e.toString());
-        throw Exception('Error occurred while making a request.');
-      }
+
+class RequestHttp {
+  final String? url;
+  final dynamic body;
+
+  RequestHttp({this.url, this.body});
+
+  Future<http.Response> post() async {
+    String? token = Prefs.getString('TOKEN');
+
+    if (kDebugMode) {
+      print('REQUEST DATA :- URL IS = $url || body = ${json.encode(body)} || Bearer $token');
     }
-  }
 
-  Future<Response<dynamic>> put() async {
     try {
-      final response = await dio.put(url!, data: body);
+      http.Response response = await http.post(
+        Uri.parse(url!),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(body),
+      );
+
+      if (kDebugMode) {
+        print('RESPONSE DATA :- ${response.statusCode} || ${response.body}');
+      }
+
       return response;
-    } on DioError catch (e) {
-      if (e.type == DioErrorType.connectionTimeout ||
-          e.type == DioErrorType.receiveTimeout) {
+    } catch (e) {
+      if (e is TimeoutException) {
         throw TimeoutException('Connection timeout. Please try again.');
       } else {
-        print(e.toString());
+        if (kDebugMode) {
+          print(e.toString());
+        }
         throw Exception('Error occurred while making a request.');
       }
     }

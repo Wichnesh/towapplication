@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:pdf/pdf.dart';
 
 import '../../../model/Equipment_model.dart';
 
@@ -38,6 +39,7 @@ class EquipmentScreenController extends GetxController {
       }
     }
   }
+
 
   // Function to capture image from camera
   Future<void> captureImage(int mainIndex, int index) async {

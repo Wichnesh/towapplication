@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../Controller/SignUp_Controller.dart';
@@ -185,18 +186,7 @@ class _Signup_PageState extends State<Signup_Page> {
                         backgroundColor: Colors.blue,
                       ),
                       onPressed: () {
-                        if (controller.passwordText.text ==
-                            controller.confirmPasswordText.text) {
-                          if (kDebugMode) {
-                            print('same');
-                          }
-                        } else {
-                          print(controller.passwordText.text);
-                          print(controller.confirmPasswordText.text);
-                          if (kDebugMode) {
-                            print('Not same');
-                          }
-                        }
+                        controller.validation();
                       },
                       child: const Text("Sign Up",
                           style: TextStyle(color: Colors.white70)),
@@ -210,6 +200,7 @@ class _Signup_PageState extends State<Signup_Page> {
       ),
     );
   }
+
 //
   @override
   Widget build(BuildContext context) {

@@ -16,6 +16,14 @@ class LoginController extends GetxController {
   TextEditingController emailText = TextEditingController();
   TextEditingController passwordText = TextEditingController();
 
+  void validation(){
+    if(emailText.text.isEmpty || passwordText.text.isEmpty){
+      Fluttertoast.showToast(msg: "Enter all data");
+    }else{
+      loginApiDio();
+    }
+  }
+
   void loginApiDio() async {
     isLoading.value = true;
     update();
@@ -26,10 +34,10 @@ class LoginController extends GetxController {
     if (kDebugMode) {
       print(requestData);
     }
-    RequestDio request = RequestDio(url: urllogin, body: requestData);
+    RequestHttp request = RequestHttp(url: urlLogin, body: requestData);
     request.post().then((response) async {
       if (response.statusCode == 200) {
-        var data = jsonDecode(response.data);
+        var data = jsonDecode(response.body);
         loginmodel login = loginmodel.fromJson(data);
         if (login.status == 'success') {
           Prefs.setBoolen('isLoggedIn', true);

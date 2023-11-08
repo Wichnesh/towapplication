@@ -16,7 +16,36 @@ class SignUpController extends GetxController {
   TextEditingController passwordText = TextEditingController();
   TextEditingController confirmPasswordText = TextEditingController();
 
-  void SignUpApiDio() async {
+  void validation(){
+    if (usernameText.text.isEmpty || emailText.text.isEmpty ||passwordText.text.isEmpty ||
+        confirmPasswordText.text.isEmpty) {
+      if (kDebugMode) {
+        print('Not same');
+      }
+      Fluttertoast.showToast(msg: "Enter all Mandatory data");
+    } else {
+      if (passwordText.text ==
+          confirmPasswordText.text) {
+        if (kDebugMode) {
+          print('same');
+        }
+        signUpApiDio();
+      } else {
+        if (kDebugMode) {
+          print(passwordText.text);
+        }
+        if (kDebugMode) {
+          print(confirmPasswordText.text);
+        }
+        if (kDebugMode) {
+          print('Not same');
+        }
+        Fluttertoast.showToast(msg: "Password is not Matching");
+      }
+    }
+  }
+
+  void signUpApiDio() async {
     isLoading.value = true;
     update();
     Map<String, dynamic> requestData = {
@@ -27,10 +56,10 @@ class SignUpController extends GetxController {
     if (kDebugMode) {
       print(requestData);
     }
-    RequestDio request = RequestDio(url: urlregister, body: requestData);
+    RequestHttp request = RequestHttp(url: urlRegister, body: requestData);
     request.post().then((response) async {
       if (response.statusCode == 200) {
-        Prefs.setBoolen('isLoggedIn', true);
+        //Prefs.setBoolen('isLoggedIn', true);
         Get.offAllNamed(ROUTE_LOGIN);
         Fluttertoast.showToast(msg: "registered-successfully");
         isLoading.value = false;
@@ -51,4 +80,6 @@ class SignUpController extends GetxController {
     });
     update();
   }
+
+
 }
