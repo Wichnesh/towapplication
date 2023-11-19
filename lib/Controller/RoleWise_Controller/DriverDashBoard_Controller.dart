@@ -8,10 +8,8 @@ import '../../Utils/pref_manager.dart';
 import '../../api/request.dart';
 import '../../api/url.dart';
 
-class ProfileController extends GetxController {
-  RxList<String> profileList = <String>[
-    'Manage User\'s',
-  ].obs;
+class DriverDashBoardController extends GetxController {
+
 
   void logout() {
     RequestHttp request = RequestHttp(url: urlLogout, token: Prefs.getString(TOKEN));
@@ -19,6 +17,8 @@ class ProfileController extends GetxController {
       if (response.statusCode == 200) {
         Fluttertoast.showToast(msg: "log-out successfully");
         await Prefs.setString(TOKEN, "");
+        await Prefs.setString(USERNAME, "");
+        await Prefs.setString(EMAIL, "");
         await Prefs.setBoolen('isLoggedIn', false);
         Get.offAllNamed(ROUTE_LOGIN);
       } else {
@@ -34,4 +34,5 @@ class ProfileController extends GetxController {
           snackPosition: SnackPosition.TOP);
     });
   }
+
 }

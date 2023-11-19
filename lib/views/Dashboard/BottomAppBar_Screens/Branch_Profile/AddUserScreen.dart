@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -54,6 +55,9 @@ class AddUserScreen extends StatelessWidget {
                   }).toList(),
                   onChanged: (value) {
                     controller.selectedUserType.value = value!;
+                    if (kDebugMode) {
+                      print('Selected User Type Index: ${controller.userList.indexOf(value)}');
+                    }
                   },
                 ),
                 const SizedBox(height: 20),
@@ -82,7 +86,7 @@ class AddUserScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add logic to save user data or perform other actions
-                    controller.saveUserData();
+                    controller.validation();
                   },
                   child: const Text('Create User'),
                 ),

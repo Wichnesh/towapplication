@@ -28,21 +28,41 @@ class LoginController extends GetxController {
     isLoading.value = true;
     update();
     Map<String, dynamic> requestData = {
-      "email": emailText.text.trim(),
+      "username_email": emailText.text.trim(),
       "password": passwordText.text.trim()
     };
     if (kDebugMode) {
       print(requestData);
     }
-    RequestHttp request = RequestHttp(url: urlLogin, body: requestData);
+    RequestHttp request = RequestHttp(url: urlLogin, body: requestData, token: '');
     request.post().then((response) async {
       if (response.statusCode == 200) {
         var data = jsonDecode(response.body);
         loginmodel login = loginmodel.fromJson(data);
         if (login.status == 'success') {
-          Prefs.setBoolen('isLoggedIn', true);
-          Get.offAllNamed(ROUTE_HOME);
-          Fluttertoast.showToast(msg: "login-successfully");
+          if(login.user!.roleId == 1){
+            await Prefs.setBoolen('isLoggedIn', true);
+            await Prefs.setString(TOKEN, login.authorisation!.token!);
+            await Prefs.setInt(ROLEID, login.user!.roleId!);
+            await Prefs.setString(USERNAME, login.user!.username!);
+            await Prefs.setString(EMAIL, login.user!.email!);
+            if (kDebugMode) {
+              print("Token --- ${Prefs.getString(TOKEN)}");
+            }
+            Get.offAllNamed(ROUTE_HOME);
+            Fluttertoast.showToast(msg: "login-successfully");
+          }else if(login.user!.roleId == 3 || login.user!.roleId == 2){
+            await Prefs.setBoolen('isLoggedIn', true);
+            await Prefs.setString(TOKEN, login.authorisation!.token!);
+            await Prefs.setInt(ROLEID, login.user!.roleId!);
+            await Prefs.setString(USERNAME, login.user!.username!);
+            await Prefs.setString(EMAIL, login.user!.email!);
+            if (kDebugMode) {
+              print("Token --- ${Prefs.getString(TOKEN)}");
+            }
+            Get.offAllNamed(ROUTE_HOME);
+            Fluttertoast.showToast(msg: "login-successfully");
+          }
         } else {
           Get.snackbar("Error", "Incorrect value",
               colorText: Colors.white,
@@ -51,7 +71,9 @@ class LoginController extends GetxController {
         }
         isLoading.value = false;
       } else {
-        throw Exception();
+        print(response.statusCode);
+        print(response.body);
+        Fluttertoast.showToast(msg: "login-failed");
       }
       isLoading.value = false;
       update();

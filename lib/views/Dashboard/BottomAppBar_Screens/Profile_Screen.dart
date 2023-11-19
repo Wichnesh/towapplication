@@ -3,48 +3,7 @@ import 'package:get/get.dart';
 
 import '../../../Controller/BottomAppBar_Controller/ProfileController.dart';
 import '../../../Utils/constant.dart';
-
-// class ProfileScreen extends StatelessWidget {
-//   ProfileController profileController = Get.put(ProfileController());
-//   @override
-//   Widget build(BuildContext context) {
-//     return SafeArea(
-//       maintainBottomViewPadding: true,
-//       minimum: const EdgeInsets.all(8),
-//       child: Scaffold(
-//         body: Obx(
-//               () => Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: ListView.builder(
-//               itemCount: profileController.profileList.length,
-//               itemBuilder: (context, index) {
-//                 return Card(
-//                   elevation: 5,
-//                   child: ListTile(
-//                     title: Row(
-//                       children: [
-//                         const Icon(Icons.person_add),
-//                         const SizedBox(width: 10,),
-//                         Text(profileController.profileList[index]),
-//                       ],
-//                     ),
-//                     trailing: IconButton(
-//                       onPressed: () {},
-//                       icon: const Icon(Icons.navigate_next_outlined),
-//                     ),
-//                     // You can add more properties or functionalities to the list tile if needed
-//                   ),
-//                 );
-//               },
-//             ),
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
-
+import '../../../Utils/pref_manager.dart';
 
 class ProfileScreen extends StatelessWidget {
   ProfileScreen({super.key});
@@ -52,6 +11,7 @@ class ProfileScreen extends StatelessWidget {
   ProfileController profileController = Get.put(ProfileController());
   @override
   Widget build(BuildContext context) {
+    int roleId = Prefs.getInt(ROLEID);
     return Scaffold(
         backgroundColor: Colors.grey.shade100,
         extendBodyBehindAppBar: true,
@@ -59,26 +19,34 @@ class ProfileScreen extends StatelessWidget {
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              const ProfileHeader(
-                title: "Ramesh Mana",
+             if(roleId == 1)  ProfileHeader(
+                title: Prefs.getString(USERNAME),
                 subtitle: "Manager",
               ),
+              if(roleId == 2)  ProfileHeader(
+                title: Prefs.getString(USERNAME),
+                subtitle: "Dispatcher",
+              ),
+              if(roleId == 3)  ProfileHeader(
+                title: Prefs.getString(USERNAME),
+                subtitle: "Driver",
+              ),
               const SizedBox(height: 10.0),
-              const UserInfo(),
+              UserInfo(controller: profileController),
               const Divider(
                 thickness: 1,
               ),
-              SizedBox(
+            roleId == 1 ?  SizedBox(
                 height: 150,
                 child: Obx(
-                      () => Padding(
+                  () => Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: ListView.builder(
                       itemCount: profileController.profileList.length,
                       itemBuilder: (context, index) {
                         return InkWell(
-                          onTap: (){
-                            if(index==0){
+                          onTap: () {
+                            if (index == 0) {
                               Get.toNamed(ROUTE_MANAGEUSERLIST);
                             }
                           },
@@ -88,7 +56,9 @@ class ProfileScreen extends StatelessWidget {
                               title: Row(
                                 children: [
                                   const Icon(Icons.person_add),
-                                  const SizedBox(width: 10,),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
                                   Text(profileController.profileList[index]),
                                 ],
                               ),
@@ -104,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-              )
+              ) : Container(),
             ],
           ),
         ));
@@ -112,10 +82,13 @@ class ProfileScreen extends StatelessWidget {
 }
 
 class UserInfo extends StatelessWidget {
-  const UserInfo({super.key});
+  ProfileController controller;
+  UserInfo({super.key,required this.controller});
+
 
   @override
   Widget build(BuildContext context) {
+    String email = Prefs.getString(EMAIL);
     return Container(
       padding: const EdgeInsets.all(10),
       child: Column(
@@ -151,22 +124,25 @@ class UserInfo extends StatelessWidget {
                           //   title: Text("Location"),
                           //   subtitle: Text("Kathmandu"),
                           // ),
-                          const ListTile(
-                            leading: Icon(Icons.email),
-                            title: Text("Email"),
-                            subtitle: Text("vignesh@gmail.com"),
+                          ListTile(
+                            leading: const Icon(Icons.email),
+                            title: const Text("Email"),
+                            subtitle: Text(email),
                           ),
                           const ListTile(
                             leading: Icon(Icons.password_sharp),
                             title: Text("Password"),
                             subtitle: Text("********"),
                           ),
-                          // const ListTile(
-                          //   leading: Icon(Icons.person),
-                          //   title: Text("About Me"),
-                          //   subtitle: Text(
-                          //       "This is a about me link and you can khow about me in this section."),
-                          // ),
+                          InkWell(
+                            onLongPress: (){
+                              controller.logout();
+                            },
+                            child: const ListTile(
+                              leading: Icon(Icons.logout),
+                              title: Text("log-out"),
+                            ),
+                          )
                         ],
                       ),
                     ],
@@ -187,10 +163,7 @@ class ProfileHeader extends StatelessWidget {
   final List<Widget>? actions;
 
   const ProfileHeader(
-      {Key? key,
-        required this.title,
-        this.subtitle,
-        this.actions})
+      {Key? key, required this.title, this.subtitle, this.actions})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -260,11 +233,11 @@ class Avatar extends StatelessWidget {
 
   const Avatar(
       {Key? key,
-        required this.image,
-        this.borderColor = Colors.grey,
-        this.backgroundColor,
-        this.radius = 30,
-        this.borderWidth = 5})
+      required this.image,
+      this.borderColor = Colors.grey,
+      this.backgroundColor,
+      this.radius = 30,
+      this.borderWidth = 5})
       : super(key: key);
 
   @override

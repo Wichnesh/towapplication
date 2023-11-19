@@ -5,8 +5,11 @@ import 'package:infinity_tow_appliation/Utils/colorUtils.dart';
 import 'package:infinity_tow_appliation/routes/app_pages.dart';
 import 'package:infinity_tow_appliation/views/Splash_Screen.dart';
 
+import 'Utils/pref_manager.dart';
+
 void main() async {
   runApp(const MyApp());
+  await Prefs.init();
   SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
 }

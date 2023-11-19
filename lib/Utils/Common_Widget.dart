@@ -8,8 +8,9 @@ class TextInputBox extends StatelessWidget {
   final TextInputType type;
   final List<TextInputFormatter>? formatter;
   final Widget? suffixWidget;
+  final bool? readOnly;
   final void Function(String)? onChange;
-  const TextInputBox({super.key,required this.controller,required this.hintText,required this.type,this.formatter,this.suffixWidget,this.onChange});
+  const TextInputBox({super.key,required this.controller,required this.hintText,required this.type,this.formatter,this.suffixWidget,this.onChange,this.readOnly});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class TextInputBox extends StatelessWidget {
       keyboardType: type,
       inputFormatters: formatter,
       onChanged: onChange,
+      readOnly: readOnly ?? false,
     );
   }
 }

@@ -56,7 +56,7 @@ class SignUpController extends GetxController {
     if (kDebugMode) {
       print(requestData);
     }
-    RequestHttp request = RequestHttp(url: urlRegister, body: requestData);
+    RequestHttp request = RequestHttp(url: urlRegister, body: requestData, token: '');
     request.post().then((response) async {
       if (response.statusCode == 200) {
         //Prefs.setBoolen('isLoggedIn', true);

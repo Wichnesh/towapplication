@@ -30,8 +30,9 @@ class User {
   int? id;
   String? name;
   String? email;
+  String? username;
   String? emailVerifiedAt;
-  String? roleId;
+  int? roleId;
   String? createdAt;
   String? updatedAt;
 
@@ -39,6 +40,7 @@ class User {
       {this.id,
       this.name,
       this.email,
+        this.username,
       this.emailVerifiedAt,
         this.roleId,
       this.createdAt,
@@ -48,6 +50,7 @@ class User {
     id = json['id'];
     name = json['name'];
     email = json['email'];
+    username = json['username'];
     emailVerifiedAt = json['email_verified_at'];
     roleId = json["role_id"];
     createdAt = json['created_at'];
@@ -59,6 +62,7 @@ class User {
     data['id'] = id;
     data['name'] = name;
     data['email'] = email;
+    data['username'] = username;
     data['email_verified_at'] = emailVerifiedAt;
     data["role_id"] = roleId;
     data['created_at'] = createdAt;

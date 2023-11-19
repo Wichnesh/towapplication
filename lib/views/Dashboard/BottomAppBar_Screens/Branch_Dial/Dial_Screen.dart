@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:infinity_tow_appliation/Utils/constant.dart';
 
-import '../../../Controller/BottomAppBar_Controller/DailController.dart';
+import '../../../../Controller/BottomAppBar_Controller/DailController.dart';
 
 
 class DialScreen extends StatelessWidget {
@@ -30,15 +31,28 @@ class DialScreen extends StatelessWidget {
                     shrinkWrap: true,
                     itemCount: controller.callList.length,
                     itemBuilder: (context, index) {
-                      return Card(
-                        elevation: 5,
-                        child: ListTile(
-                          title: Text(controller.callList[index]),
-                          trailing: IconButton(
-                            onPressed: () {},
-                            icon: const Icon(Icons.navigate_next_outlined),
+                      return InkWell(
+                        onTap: (){
+                          if(index == 0){
+                            Get.toNamed(ROUTE_WAITING);
+                          }else if(index == 1){
+                            Get.toNamed(ROUTE_ACTIVE);
+                          }else if(index == 2){
+                            Get.toNamed(ROUTE_COMPLETE);
+                          }
+                        },
+                        child: Card(
+                          elevation: 5,
+                          child: ListTile(
+                            title: Text(controller.callList[index]),
+                            trailing: IconButton(
+                              onPressed: () {
+
+                              },
+                              icon: const Icon(Icons.navigate_next_outlined),
+                            ),
+                            // You can add more properties or functionalities to the list tile if needed
                           ),
-                          // You can add more properties or functionalities to the list tile if needed
                         ),
                       );
                     },

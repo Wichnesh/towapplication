@@ -46,6 +46,9 @@ dependencies:
   permission_handler: ^11.0.1
   pdf: ^3.10.4
   http: ^1.1.0
+  open_file: ^3.3.2
+  qr_code_scanner: ^1.0.1
+  path_provider: ^2.0.8
 
 dev_dependencies:
   flutter_test:

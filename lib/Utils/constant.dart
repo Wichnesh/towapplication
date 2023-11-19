@@ -10,6 +10,15 @@ const ROUTE_MANAGETRUCKS = "${slash}trucks";
 const ROUTE_RECORDEXPENSE = "${slash}recordExpense";
 const ROUTE_MANAGEINSPECTIONFORM = "${slash}inspectionForm";
 const ROUTE_ADDTRUCKFORM = "${slash}addTruck";
+const ROUTE_DRIVERHOME = "${slash}driverHome";
+const ROUTE_ADDCALL = "${slash}addCall";
+const ROUTE_WAITING = "${slash}waiting";
+const ROUTE_ACTIVE = "${slash}active";
+const ROUTE_COMPLETE = "${slash}completed";
 ////
 const SHARED_ADMIN = 'Admin';
-const TOKEN = "Token";
+const TOKEN = "TOKEN";
+const ROLEID = "RoleId";
+const USERNAME = "Username";
+const EMAIL = "Email";
+

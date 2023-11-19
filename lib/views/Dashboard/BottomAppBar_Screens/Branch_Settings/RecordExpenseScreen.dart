@@ -19,19 +19,18 @@ class RecordExpenseScreen extends GetView<ExpenseController> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                DropdownButtonFormField<String>(
-                  value: controller.selectedTruck.value,
-                  hint: const Text('Select Truck'),
+                Obx(() => DropdownButtonFormField<dynamic>(
+                  value: controller.selectedTruck.value ?? '',
                   items: controller.truckList.map((truck) {
                     return DropdownMenuItem(
-                      value: truck,
-                      child: Text(truck),
+                      value: truck.name ??'',
+                      child: Text(truck.name??''),
                     );
                   }).toList(),
                   onChanged: (value) {
                     controller.selectedTruck.value = value!;
                   },
-                ),
+                )),
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: controller.selectedCategory.value,
@@ -91,84 +90,62 @@ class RecordExpenseScreen extends GetView<ExpenseController> {
                       Fluttertoast.showToast(msg: 'Image Limit reached');
                     }
                   },
-                  child: const Text('Attach Image'),
+                  child: const Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.attach_file),
+                      Text('Attach Image'),
+                    ],
+                  ),
+
                 ),
                 const SizedBox(height: 20.0),
-                ListView.builder(
+                Obx(() => ListView.builder(
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: controller.selectedImages.length,
                   itemBuilder: (context, index) {
                     return SizedBox(
-                      height: 150,
-                      child: GestureDetector(
-                        onTap: () {
-                          // Show the selected image in a dialog box
-                          showDialog(
-                            context: context,
-                            builder: (context) => CupertinoAlertDialog(
-                              title: const Text('Selected Image'),
-                              content: Column(
-                                children: [
-                                  const SizedBox(
-                                    height: 10,
-                                  ),
-                                  Image.file(File(
-                                      controller.selectedImages[index].path)),
-                                ],
+                        height: 150,
+                        child: GestureDetector(
+                          onTap: () {
+                            // Show the selected image in a dialog box
+                            showDialog(
+                              context: context,
+                              builder: (context) => CupertinoAlertDialog(
+                                title: const Text('Selected Image'),
+                                content: Column(
+                                  children: [
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Image.file(File(
+                                        controller.selectedImages[index].path)),
+                                  ],
+                                ),
                               ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Image.file(
+                              File(controller.selectedImages[index].path),
+                              width: 100,
+                              height: 100,
+                              fit: BoxFit.cover,
                             ),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: Image.file(
-                            File(controller.selectedImages[index].path),
-                            width: 100,
-                            height: 100,
-                            fit: BoxFit.cover,
                           ),
-                        ),
-                      )
+                        )
                     );
                   },
+                )),
+                ElevatedButton(
+                  onPressed: () async {
+                    controller.validation();
+                  },
+                  child: const Text('Save'),
                 ),
-                // Expanded(
-                //   child: ListView.builder(
-                //     itemCount: controller.selectedImages.length,
-                //     itemBuilder: (context, index) {
-                //       return GestureDetector(
-                //         onTap: () {
-                //           // Show the selected image in a dialog box
-                //           showDialog(
-                //             context: context,
-                //             builder: (context) => CupertinoAlertDialog(
-                //               title: const Text('Selected Image'),
-                //               content: Column(
-                //                 children: [
-                //                   const SizedBox(
-                //                     height: 10,
-                //                   ),
-                //                   Image.file(File(
-                //                       controller.selectedImages[index].path)),
-                //                 ],
-                //               ),
-                //             ),
-                //           );
-                //         },
-                //         child: Padding(
-                //           padding: const EdgeInsets.symmetric(vertical: 8.0),
-                //           child: Image.file(
-                //             File(controller.selectedImages[index].path),
-                //             width: 100,
-                //             height: 100,
-                //             fit: BoxFit.cover,
-                //           ),
-                //         ),
-                //       );
-                //     },
-                //   ),
-                // ),
               ],
             )),
       ),
