@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../../Controller/BottomAppBar_Controller/DailController.dart';
 import '../../../../Utils/colorUtils.dart';
+import 'ActiveCall_Screen.dart';
 
 class WaitingCallScreen extends StatelessWidget {
   WaitingCallScreen({super.key});
@@ -36,6 +37,7 @@ class WaitingCallScreen extends StatelessWidget {
                       if (kDebugMode) {
                         print(data.id);
                       }
+                      Get.to(CallDetailScreen(data: data));
                     },
                     child: Card(
                       elevation: 5,
@@ -46,19 +48,19 @@ class WaitingCallScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            const Text("Waiting",style: TextStyle(fontSize: 16)),
+                            const Text("Waiting",style: TextStyle(fontSize: 16,color: red)),
                             const Spacer(),
-                            Text("${data.call.vehicle.make ?? ''} ${data.call.vehicle.model ?? ''} (${data.call.vehicle.color}) ${data.call.vehicle.driverType}"),
+                            Text("${data.vehicle.make ?? ''} ${data.vehicle.model ?? ''} (${data.vehicle.color}) ${data.vehicle.driverType}"),
                             const Spacer(),
-                            Text(data.call.callDetails.reason ?? ''),
+                            Text(data.callDetails.reason ?? ''),
                             const Spacer(),
-                            Text(data.call.callDetails.account ?? ''),
+                            Text(data.callDetails.account ?? ''),
                             const Spacer(),
-                            Text(data.call.callDetails.currentDateTime),
+                            Text(data.callDetails.currentDateTime),
                             const Spacer(),
-                            Text("Pickup : ${data.call.location.pickupLocation ?? ''}"),
+                            Text("Pickup : ${data.location.pickupLocation ?? ''}"),
                             const Spacer(),
-                            Text("Destination : ${data.call.location.destination}" ?? ''),
+                            Text("Destination : ${data.location.destination}" ?? ''),
                             const Spacer(),
                             const Divider(color: black),
                             Row(
@@ -66,19 +68,19 @@ class WaitingCallScreen extends StatelessWidget {
                               children: [
                                 TextButton(
                                     onPressed: () {
-                                      controller.showUpdateStatusDialog(data.call.callDetails.currentDateTime ?? '',data.driverId ??'',data.truckId??'',data.call.status,data.id);
+                                      controller.showUpdateStatusDialog(data.callDetails.currentDateTime ?? '',data.driverName ??'',data.truckName??'',data.status,data.id);
                                     },
-                                    child: const Row(
+                                    child: Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
                                       children: [
-                                        Icon(Icons.swap_horiz_sharp),
-                                        Text("Update Status")
+                                        const Icon(Icons.move_down_sharp),
+                                       if(data.status == 1) const Text("Set to Dispatched")
                                       ],
                                     )),
-                                data.call.contactDetails.phone == '' ?
+                                data.contactDetails.phone == '' ?
                                 const SizedBox() : TextButton(
                                     onPressed: () {
-
+                                      controller.launchDialer(data.contactDetails.phone);
                                     },
                                     child: const Row(
                                       mainAxisAlignment: MainAxisAlignment.center,
@@ -86,7 +88,18 @@ class WaitingCallScreen extends StatelessWidget {
                                         Icon(Icons.call,size: 18,),
                                         Text("Call Contact")
                                       ],
-                                    ))
+                                    )),
+                                TextButton(
+                                    onPressed: () {
+                                      controller.showCancelStatusDialog(data.status,data.id);
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        const Icon(Icons.cancel),
+                                        if(data.status == 1) const Text("Cancel")
+                                      ],
+                                    )),
                               ],
                             )
                           ],
@@ -103,3 +116,4 @@ class WaitingCallScreen extends StatelessWidget {
     );
   }
 }
+

@@ -138,7 +138,8 @@ class AddCallController extends GetxController {
         // Parse the response and update the employees list
         UserListModel userListModel = userListModelFromJson(response.body);
         employees.assignAll(userListModel.employees);
-        selectedEmployee.value = employees[0].name;// Assign employees list
+        selectedEmployee.value = employees[0].name;
+        driverId.value = employees[0].id.toString(); // Assign employees list
         Fluttertoast.showToast(msg: "UserList fetch successfully");
       } else {
         Fluttertoast.showToast(msg: "${response.statusCode}");
@@ -164,6 +165,7 @@ class AddCallController extends GetxController {
         TruckListModel userListModel = truckListModelFromJson(response.body);
         truckList.assignAll(userListModel.truckList); // Assign employees list
         selectedTruck.value = truckList[0].name;
+        truckId.value = truckList[0].id.toString();
         Fluttertoast.showToast(msg: "UserList fetch successfully");
       } else {
         Fluttertoast.showToast(msg: "${response.statusCode}");

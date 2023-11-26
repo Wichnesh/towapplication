@@ -19,18 +19,24 @@ class RecordExpenseScreen extends GetView<ExpenseController> {
             padding: const EdgeInsets.all(16.0),
             child: ListView(
               children: [
-                Obx(() => DropdownButtonFormField<dynamic>(
-                  value: controller.selectedTruck.value ?? '',
-                  items: controller.truckList.map((truck) {
-                    return DropdownMenuItem(
-                      value: truck.name ??'',
-                      child: Text(truck.name??''),
+                Obx((){
+                  if (controller.truckList.isEmpty) {
+                    return const Text('Truck Not Available');
+                  } else {
+                    return DropdownButtonFormField<dynamic>(
+                      value: controller.selectedTruck.value ?? '',
+                      items: controller.truckList.map((truck) {
+                        return DropdownMenuItem(
+                          value: truck.name ??'',
+                          child: Text(truck.name ?? ''),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        controller.selectedTruck.value = value!;
+                      },
                     );
-                  }).toList(),
-                  onChanged: (value) {
-                    controller.selectedTruck.value = value!;
-                  },
-                )),
+                  }
+                }),
                 const SizedBox(height: 20),
                 DropdownButtonFormField<String>(
                   value: controller.selectedCategory.value,

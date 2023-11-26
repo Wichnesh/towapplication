@@ -361,6 +361,92 @@ class AddCallScreen extends StatelessWidget {
                 height: 10,
               ),
               const Text(
+                'Contacts',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              DropdownButtonFormField<String>(
+                value: controller.selectedContactType.value,
+                hint: const Text('Select Reason'),
+                items: controller.contactType.map((contact) {
+                  return DropdownMenuItem(
+                    value: contact,
+                    child: Text(contact.toString()),
+                  );
+                }).toList(),
+                onChanged: (value) {
+                  controller.selectedContactType.value = value!.toString();
+                },
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextInputBox(
+                controller: controller.nameText,
+                hintText: 'Full Name',
+                type: TextInputType.name,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextInputBox(
+                controller: controller.phoneText,
+                hintText: 'Phone',
+                type: TextInputType.name,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextInputBox(
+                controller: controller.emailText,
+                hintText: 'Email',
+                type: TextInputType.name,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              TextInputBox(
+                controller: controller.addressText,
+                hintText: 'Address',
+                type: TextInputType.name,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextInputBox(
+                      controller: controller.contactCity,
+                      hintText: 'City',
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: TextInputBox(
+                      controller: controller.contactState,
+                      hintText: 'State',
+                      type: TextInputType.name,
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  Expanded(
+                    child: TextInputBox(
+                      controller: controller.contactZip,
+                      hintText: 'Zip',
+                      type: TextInputType.name,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              const Text(
                 'Charges',
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),

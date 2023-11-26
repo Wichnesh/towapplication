@@ -51,7 +51,8 @@ class AddUserController extends GetxController {
     isLoading.value = true;
     update();
     Map<String, dynamic> requestData = {
-      "name": username.value,
+      "name" : fullName.value,
+      "username": username.value,
       "email": password.value,
       "password": password.value,
       "role_id": userList.indexOf(selectedUserType.value)

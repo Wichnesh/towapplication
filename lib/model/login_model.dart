@@ -47,14 +47,14 @@ class User {
       this.updatedAt});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    name = json['name'];
-    email = json['email'];
-    username = json['username'];
-    emailVerifiedAt = json['email_verified_at'];
-    roleId = json["role_id"];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    id = json['id']??'';
+    name = json['name']??'';
+    email = json['email']??'';
+    username = json['username']??'';
+    emailVerifiedAt = json['email_verified_at']??'';
+    roleId = json["role_id"] ??'';
+    createdAt = json['created_at']??'';
+    updatedAt = json['updated_at']??'';
   }
 
   Map<String, dynamic> toJson() {

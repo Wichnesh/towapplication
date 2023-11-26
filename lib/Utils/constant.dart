@@ -15,6 +15,7 @@ const ROUTE_ADDCALL = "${slash}addCall";
 const ROUTE_WAITING = "${slash}waiting";
 const ROUTE_ACTIVE = "${slash}active";
 const ROUTE_COMPLETE = "${slash}completed";
+const ROUTE_CANCELLED = "${slash}cancelled";
 ////
 const SHARED_ADMIN = 'Admin';
 const TOKEN = "TOKEN";

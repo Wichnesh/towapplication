@@ -6,7 +6,7 @@ class SettingController extends GetxController {
     'Record Expense',
     'Trucks',
     'Equipment Inspection',
-    'Map',
+    // 'Map',
   ].obs;
 
 }

@@ -1,5 +1,5 @@
 const urlBase = "https://sample.mycompany.host/api/";
-
+const urlPdfBase = "https://sample.mycompany.host/";
 const urlLogin = "${urlBase}login";
 const urlRegister = "${urlBase}register";
 const urlAddUser = "${urlBase}user-add";
@@ -9,5 +9,7 @@ const urlTruckList = "${urlBase}truck-list";
 const urlAddExpense = "${urlBase}add-expense";
 const urlAddCall = "${urlBase}add-call";
 const urlCallDetail = "${urlBase}call-detail";
+const urlAddInspection = "${urlBase}add-inspection";
+const urlInspectionList = "${urlBase}inspection-list";
 const urlLogout = "${urlBase}logout";
 const urlChangeStatus = "${urlBase}change-status";

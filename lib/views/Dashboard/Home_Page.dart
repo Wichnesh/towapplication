@@ -81,23 +81,24 @@ class Home_Page extends GetView<AddCallController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+            // IconButton(
+            //   icon: const Icon(Icons.home),
+            //   onPressed: () => dashBoardController.updateSelectedIndex(0),
+            // ),
             IconButton(
-              icon: const Icon(Icons.home),
+              icon: const Icon(Icons.phone),
               onPressed: () => dashBoardController.updateSelectedIndex(0),
             ),
             IconButton(
               icon: const Icon(Icons.person),
               onPressed: () => dashBoardController.updateSelectedIndex(1),
             ),
-            IconButton(
-              icon: const Icon(Icons.phone),
-              onPressed: () => dashBoardController.updateSelectedIndex(2),
-            ),
+
             IconButton(
               icon: const Icon(Icons.list),
-              onPressed: () => dashBoardController.updateSelectedIndex(3),
+              onPressed: () => dashBoardController.updateSelectedIndex(2),
             ),
-            SizedBox(width: screenWidth/ 20,),
+            // SizedBox(width: screenWidth/ 20,),
             const SizedBox(), // This is an empty space for the centered FAB
           ],
         ),
@@ -106,17 +107,17 @@ class Home_Page extends GetView<AddCallController> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
+            // IconButton(
+            //   icon: const Icon(Icons.home),
+            //   onPressed: () => dashBoardController.updateSelectedIndex(0),
+            // ),
             IconButton(
-              icon: const Icon(Icons.home),
+              icon: const Icon(Icons.phone),
               onPressed: () => dashBoardController.updateSelectedIndex(0),
             ),
             IconButton(
               icon: const Icon(Icons.person),
               onPressed: () => dashBoardController.updateSelectedIndex(1),
-            ),
-            IconButton(
-              icon: const Icon(Icons.phone),
-              onPressed: () => dashBoardController.updateSelectedIndex(2),
             ),
             // IconButton(
             //   icon: const Icon(Icons.list),
@@ -132,13 +133,13 @@ class Home_Page extends GetView<AddCallController> {
 
   Widget _getPage(int index) {
     switch (index) {
+      // case 0:
+      //   return const HomeScreen();
       case 0:
-        return const HomeScreen();
+        return DialScreen();
       case 1:
         return ProfileScreen();
       case 2:
-        return DialScreen();
-      case 3:
         return SettingScreen();
       default:
         return const HomeScreen();

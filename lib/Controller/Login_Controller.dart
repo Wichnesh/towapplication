@@ -44,7 +44,11 @@ class LoginController extends GetxController {
             await Prefs.setBoolen('isLoggedIn', true);
             await Prefs.setString(TOKEN, login.authorisation!.token!);
             await Prefs.setInt(ROLEID, login.user!.roleId!);
-            await Prefs.setString(USERNAME, login.user!.username!);
+            if(login.user!.username == null){
+              await Prefs.setString(USERNAME, login.user!.name!??'');
+            }else{
+              await Prefs.setString(USERNAME, login.user!.username!??'');
+            }
             await Prefs.setString(EMAIL, login.user!.email!);
             if (kDebugMode) {
               print("Token --- ${Prefs.getString(TOKEN)}");

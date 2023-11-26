@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../../../Controller/BottomAppBar_Controller/Branch_SettingController/EquipmentScreenController.dart';
 import '../../../../Utils/Common_Widget.dart';
 
@@ -21,20 +20,24 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
           padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              DropdownButtonFormField<String>(
-                value: controller.selectedTruck.value,
-                hint: const Text('Select Truck'),
-                items: controller.truckList.map((truck) {
-                  return DropdownMenuItem(
-                    value: truck,
-                    child: Text(truck),
+              Obx((){
+                if (controller.truckList.isEmpty) {
+                  return const Text('Truck Not Available');
+                } else {
+                  return DropdownButtonFormField<dynamic>(
+                    value: controller.selectedTruck.value ?? '',
+                    items: controller.truckList.map((truck) {
+                      return DropdownMenuItem(
+                        value: truck.name ??'',
+                        child: Text(truck.name ?? ''),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      controller.selectedTruck.value = value!;
+                    },
                   );
-                }).toList(),
-                onChanged: (value) {
-                  controller.selectedTruck.value = value!;
-                  controller.inspectionList[0].truck = controller.selectedTruck.value;
-                },
-              ),
+                }
+              }),
               const SizedBox(height: 20),
               TextInputBox(
                 controller: controller.odometerText,
@@ -129,6 +132,7 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
                                           borderColor: Colors.black,
                                           onTap: (){
                                             controller.updateInspectionStatus(mainIndex,index, 'Fail');
+                                            _showFailDialog(context,mainIndex,index);
                                           }),
                                       const Text('Fail',style: TextStyle(fontWeight: FontWeight.w500)),
                                       CustomRadioButton(
@@ -173,6 +177,41 @@ class InspectionScreen extends GetView<EquipmentScreenController> {
           ),
         ),
       ),
+    );
+  }
+
+  // Function to show the dialog
+  void _showFailDialog(BuildContext context, int mainIndex, int index) {
+    TextEditingController failReasonController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Notes'),
+          content: TextFormField(
+            controller: failReasonController,
+            decoration: const InputDecoration(labelText: 'Enter Notes'),
+          ),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('Cancel'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                String failReason = failReasonController.text;
+                // Handle the fail reason, you can pass it to your controller or do something else
+                controller.updateNotes(mainIndex, index, failReason);
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

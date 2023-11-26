@@ -21,6 +21,7 @@ class ExpenseController extends GetxController {
   final gallonsController = TextEditingController();
   final odometerController = TextEditingController();
   var selectedTruck = ''.obs;
+  var truckId = "".obs;
   var selectedCategory = 'Select Category'.obs;
   var selectedImages = <XFile>[].obs;
   File? image;
@@ -58,9 +59,10 @@ class ExpenseController extends GetxController {
     request.get().then((response) async {
       if (response.statusCode == 200) {
         // Parse the response and update the employees list
-        TruckListModel userListModel = truckListModelFromJson(response.body);
-        truckList.assignAll(userListModel.truckList); // Assign employees list
+        TruckListModel truckListModel = truckListModelFromJson(response.body);
+        truckList.assignAll(truckListModel.truckList); // Assign employees list
         selectedTruck.value = truckList[0].name;
+        truckId.value = truckList[0].id.toString();
         Fluttertoast.showToast(msg: "UserList fetch successfully");
       } else {
         Fluttertoast.showToast(msg: "${response.statusCode}");
@@ -124,7 +126,7 @@ class ExpenseController extends GetxController {
     if(image == null){
 
     }else{
-      var stream = new http.ByteStream(DelegatingStream.typed(image!.openRead()));
+      var stream = http.ByteStream(DelegatingStream.typed(image!.openRead()));
       // get file length
       var length = await image!.length(); //imageFile is your image file
       var multipartFileSign = http.MultipartFile('file', stream, length,
@@ -132,7 +134,7 @@ class ExpenseController extends GetxController {
       request.files.add(multipartFileSign);
     }
     request.headers.addAll(headers);
-    request.fields['truck_id'] = "5";
+    request.fields['truck_id'] = truckId.value;
     request.fields['category'] = selectedCategory.value;
     request.fields['title'] = titleController.text;
     request.fields['details'] = detailsController.text;

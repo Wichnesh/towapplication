@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:infinity_tow_appliation/Utils/colorUtils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../Utils/constant.dart';
 import '../../Utils/pref_manager.dart';
@@ -16,6 +17,7 @@ class DialController extends GetxController {
   var waitingList = <CallDetail>[].obs;
   var activeList = <CallDetail>[].obs;
   var completeList = <CallDetail>[].obs;
+  var cancelledList = <CallDetail>[].obs;
 
   RxList<String> callList = <String>[
     'Waiting Calls',
@@ -35,22 +37,24 @@ class DialController extends GetxController {
     waitingList.clear();
     activeList.clear();
     completeList.clear();
+    cancelledList.clear();
     isLoading.value = true;
     update();
     RequestHttp request = RequestHttp(url: urlCallDetail, token: Prefs.getString(TOKEN));
     request.post().then((response) async {
       if (response.statusCode == 200) {
         // Parse the response and update the employees list
-        TruckListModel userListModel = truckListModelFromJson(response.body);
+        CallDetailModel truckListModel = callDetailListModelFromJson(response.body);
         try{
           totalCallDetailsList
-              .assignAll(userListModel.callDetail);
+              .assignAll(truckListModel.callDetail);
         }catch(e){
           print(e.toString());
         }
         assignWaitingList();
         assignActiveList();
         assignCompletedList();
+        assignCancelledList();
         update();
         isLoading.value = false;
       } else {
@@ -72,7 +76,7 @@ class DialController extends GetxController {
 
   void assignWaitingList() {
     for(var waiting in totalCallDetailsList){
-      if(waiting.call.status == 1){
+      if(waiting.status == 1){
        waitingList.add(waiting);
       }
     }
@@ -82,9 +86,9 @@ class DialController extends GetxController {
 
   void assignActiveList(){
     for(var active in totalCallDetailsList){
-      if(active.call.status == 2 || active.call.status ==3
-      || active.call.status ==4 || active.call.status ==5
-      || active.call.status ==6){
+      if(active.status == 2 || active.status ==3
+      || active.status ==4 || active.status ==5
+      || active.status ==6){
         activeList.add(active);
       }
     }
@@ -94,12 +98,22 @@ class DialController extends GetxController {
 
   void assignCompletedList(){
     for(var completed in totalCallDetailsList){
-      if(completed.call.status == 7){
+      if(completed.status == 7){
         completeList.add(completed);
       }
     }
     update();
     debugPrint(completeList.length.toString());
+  }
+
+  void assignCancelledList(){
+    for(var cancelled in totalCallDetailsList){
+      if(cancelled.status == 10){
+        cancelledList.add(cancelled);
+      }
+    }
+    update();
+    debugPrint(cancelledList.length.toString());
   }
 
   void showUpdateStatusDialog(String currentDateTime,String driver,String truck,int status,int id) {
@@ -287,6 +301,39 @@ class DialController extends GetxController {
     );
   }
 
+  void showCancelStatusDialog(int status,int id) {
+    Get.dialog(
+      AlertDialog(
+        title: const Text('Update Status'),
+        content: const Text("Do you want to cancel?"),
+        actions: <Widget>[
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              TextButton(
+                  onPressed: () {
+                    updateStatus(id,9);
+                  },
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text("Yes")
+                    ],
+                  )),
+              TextButton(
+                onPressed: () {
+                  Get.back(); // Close the dialog
+                },
+                child: const Text('No'),
+              ),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
   void updateStatus(int callId,int status) {
     isLoading.value = true;
     int updatedStatus = status + 1;
@@ -324,5 +371,14 @@ class DialController extends GetxController {
       isLoading.value = false;
     });
     update();
+  }
+
+  launchDialer(String phoneNumber) async {
+    String url = 'tel:$phoneNumber';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }

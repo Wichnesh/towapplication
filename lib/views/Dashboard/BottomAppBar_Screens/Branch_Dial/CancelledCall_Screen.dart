@@ -5,22 +5,22 @@ import '../../../../Controller/BottomAppBar_Controller/DailController.dart';
 import '../../../../Utils/colorUtils.dart';
 import 'ActiveCall_Screen.dart';
 
-class CompletedCallScreen extends StatelessWidget {
-  CompletedCallScreen({super.key});
+class CancelledCallScreen extends StatelessWidget {
+  CancelledCallScreen({super.key});
   final controller = Get.find<DialController>();
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Completed'),
+        title: const Text('Cancelled Calls'),
         centerTitle: true,
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
         } else {
-          if (controller.completeList.isEmpty) {
+          if (controller.cancelledList.isEmpty) {
             return const Center(
               child: Text('No Data'),
             );
@@ -28,9 +28,9 @@ class CompletedCallScreen extends StatelessWidget {
             return Padding(
               padding: const EdgeInsets.all(8.0),
               child: ListView.builder(
-                itemCount: controller.completeList.length,
+                itemCount: controller.cancelledList.length,
                 itemBuilder: (context, index) {
-                  var data = controller.completeList[index];
+                  var data = controller.cancelledList[index];
                   return InkWell(
                     onTap: () {
                       if (kDebugMode) {
@@ -47,8 +47,8 @@ class CompletedCallScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            if (data.status == 7)
-                              Text("Completed by ${data.driverName}",
+                            if (data.status == 10)
+                              Text("Cancelled by ${data.driverName}",
                                   style: const TextStyle(fontSize: 16)),
                             const Spacer(),
                             Text(
@@ -65,7 +65,7 @@ class CompletedCallScreen extends StatelessWidget {
                             const Spacer(),
                             Text("Destination : ${data.location.destination}" ??
                                 ''),
-                            const Spacer(),
+                            // const Spacer(),
                             // const Divider(color: black),
                             // Row(
                             //   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -82,7 +82,7 @@ class CompletedCallScreen extends StatelessWidget {
                             //         },
                             //         child: const Row(
                             //           mainAxisAlignment:
-                            //               MainAxisAlignment.center,
+                            //           MainAxisAlignment.center,
                             //           children: [
                             //             Icon(Icons.swap_horiz_sharp),
                             //             Text("Update Status")
@@ -91,18 +91,18 @@ class CompletedCallScreen extends StatelessWidget {
                             //     data.contactDetails.phone == ''
                             //         ? const SizedBox()
                             //         : TextButton(
-                            //             onPressed: () {},
-                            //             child: const Row(
-                            //               mainAxisAlignment:
-                            //                   MainAxisAlignment.center,
-                            //               children: [
-                            //                 Icon(
-                            //                   Icons.call,
-                            //                   size: 18,
-                            //                 ),
-                            //                 Text("Call Contact")
-                            //               ],
-                            //             ))
+                            //         onPressed: () {},
+                            //         child: const Row(
+                            //           mainAxisAlignment:
+                            //           MainAxisAlignment.center,
+                            //           children: [
+                            //             Icon(
+                            //               Icons.call,
+                            //               size: 18,
+                            //             ),
+                            //             Text("Call Contact")
+                            //           ],
+                            //         ))
                             //   ],
                             // )
                           ],

@@ -1,33 +1,44 @@
 import 'dart:convert';
 import 'dart:typed_data';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:pdf/pdf.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:async/src/delegate/stream.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:pdf/pdf.dart';
-
+import 'package:http/http.dart' as http;
+import '../../../Utils/constant.dart';
+import '../../../Utils/pref_manager.dart';
+import '../../../api/request.dart';
+import '../../../api/url.dart';
 import '../../../model/Equipment_model.dart';
+import '../../../model/Truck_model.dart';
 
 class EquipmentScreenController extends GetxController {
   var inspectionItems = <Datum>[].obs;
   var inspectionList = <EquipmentInspectionModel>[].obs;
-  var selectedTruck = "Select Truck".obs;
-  var truckList = ['Select Truck', 'Truck 1', 'Truck 2'].obs;
+  var selectedTruck = "".obs;
+  var truckId = "".obs;
+  //var truckList = ['Select Truck', 'Truck 1', 'Truck 2'].obs;
+  var truckList = <TruckList>[].obs;
   TextEditingController odometerText = TextEditingController();
   TextEditingController notesText = TextEditingController();
   // Define a RxString to hold the selected status (Pass, Fail, N/A)
   RxString selectedStatus = ''.obs;
   var pdf = pw.Document();
+  File? generatedPdf;
 
   @override
   void onInit() {
-    parseJson();
     super.onInit();
+    parseJson();
+    getTruckList();
   }
 
   // Setter method to update the selected status
@@ -35,18 +46,52 @@ class EquipmentScreenController extends GetxController {
     selectedStatus.value = status;
   }
 
+  void getTruckList() {
+    truckList.clear();
+    RequestHttp request = RequestHttp(url: urlTruckList, token: Prefs.getString(TOKEN));
+    request.get().then((response) async {
+      if (response.statusCode == 200) {
+        // Parse the response and update the employees list
+        TruckListModel truckListModel = truckListModelFromJson(response.body);
+        truckList.assignAll(truckListModel.truckList); // Assign employees list
+        selectedTruck.value = truckList[0].name;
+        truckId.value = truckList[0].id.toString();
+        Fluttertoast.showToast(msg: "UserList fetch successfully");
+      } else {
+        Fluttertoast.showToast(msg: "${response.statusCode}");
+      }
+      update();
+    }).catchError((onError) {
+      if (kDebugMode) {
+        print(onError);
+      }
+      // Get.snackbar("Error", onError.toString(),
+      //     colorText: Colors.white,
+      //     backgroundColor: Colors.red,
+      //     snackPosition: SnackPosition.TOP);
+      Fluttertoast.showToast(msg: 'Truck Not Available');
+    });
+  }
+
   void printList() {
     for (var data in inspectionList) {
-      print(data.truck);
+      if (kDebugMode) {
+        print(data.truck);
+      }
       for (var item in data.data) {
-        print(item.title);
+        if (kDebugMode) {
+          print(item.title);
+        }
         for (var list in item.inspectionItems) {
-          print(list.name);
+          if (kDebugMode) {
+            print(list.name);
+          }
         }
       }
     }
     generatePdf();
   }
+
 
   // Function to capture image from camera
   Future<void> captureImage(int mainIndex, int index) async {
@@ -89,6 +134,12 @@ class EquipmentScreenController extends GetxController {
           break;
       }
     }
+  }
+
+  void updateNotes(int mainIndex, int index,String notes){
+    var item = inspectionList[0].data[mainIndex].inspectionItems[index];
+    item.notes = notes;
+
   }
 
   void parseJson() {
@@ -369,8 +420,68 @@ class EquipmentScreenController extends GetxController {
           ];
         }));
     final tempDir = await getTemporaryDirectory();
-    final pdfFile = File('${tempDir.path}/eVHC_SpareIt${DateTime.now()}.pdf');
-    await pdfFile.writeAsBytes(await pdf.save());
-    await OpenFile.open(pdfFile.path);
+    generatedPdf = File('${tempDir.path}/InspectionReport${DateTime.now()}.pdf');
+    await generatedPdf?.writeAsBytes(await pdf.save());
+    if(generatedPdf == null){
+      debugPrint('pdf not generated');
+    }else{
+      onSubmit();
+    }
+    // await OpenFile.open(generatedPdf?.path);
+  }
+
+  void onSubmit() async {
+    Map<String, String> headers = {
+      "Accept": "application/json",
+      "Authorization": "Bearer ${Prefs.getString(TOKEN)}"
+    };
+    var uri = Uri.parse(urlAddInspection);
+    var request = http.MultipartRequest("POST", uri);
+    if(generatedPdf == null){
+
+    }else{
+      // Add PDF file to the request
+      //var pdfFile = File('${tempDir.path}/InspectionReport${DateTime.now()}.pdf');
+      var pdfStream = http.ByteStream(DelegatingStream.typed(generatedPdf!.openRead()));
+      var length = await generatedPdf!.length();
+      var pdfMultipartFile = http.MultipartFile('inspection_file', pdfStream, length,
+          filename: generatedPdf!.path);
+      request.files.add(pdfMultipartFile);
+    }
+    request.headers.addAll(headers);
+    request.fields['truck_id'] = truckId.value;
+    request.fields['odometer'] = odometerText.text;
+    request.fields['notes'] = notesText.text;
+    if (kDebugMode) {
+      print('REQUEST  : - ${request.fields}  ${request.files}');
+    }
+
+// send
+    var response = await request.send();
+    if (kDebugMode) {
+      print(response.statusCode);
+    }
+    response.stream.transform(utf8.decoder).listen((value) async {
+      //Get.back();
+      try {
+        if (kDebugMode) {
+          print(value);
+        }
+        if (response.statusCode == 200) {
+          Fluttertoast.showToast(msg: "Inspection Created Successfully");
+          Get.offAllNamed(ROUTE_HOME);
+        }else{
+          Get.snackbar("Error", response.statusCode.toString(),
+              colorText: Colors.white,
+              backgroundColor: Colors.blue,
+              snackPosition: SnackPosition.TOP);
+        }
+        //isLoading.value = false;
+      } catch (e) {
+        print(e.toString());
+      }
+      // Get.back();
+      update();
+    });
   }
 }
